@@ -8,7 +8,14 @@ import {
 } from 'react-router-dom';
 import './App.css';
 import Tracker from './components/Tracker';
-
+import {
+  FaTachometerAlt,
+  FaChartBar,
+  FaUsers,
+  FaUser,
+  FaClipboardList,
+  FaSignOutAlt
+} from 'react-icons/fa';
 
 function Dashboard() {
   return (
@@ -26,23 +33,28 @@ function Layout() {
   return (
     <div className={`App ${isTrackerPage ? 'tracker-layout' : ''}`}>
       <aside className="sidebar">
-        <h2>Admin Dashboard</h2>
-        <nav>
-          <ul>
-            <li><Link to="/">Dashboard</Link></li>
-            <li><Link to="/users">Statistics</Link></li>
-            <li><Link to="/reports">Users</Link></li>
-            <li><Link to="/tracker">Tracker</Link></li>
-          </ul>
-        </nav>
+        <div className="top-section">
+          <div className="logo-circle">
+            <span className="logo-text">WhereNa<br />You</span>
+          </div>
+          <nav>
+            <ul>
+              <li><Link to="/" className={location.pathname === '/' ? 'active' : ''}><FaTachometerAlt className="icon" /> Dashboard</Link></li>
+              <li><Link to="/users" className={location.pathname === '/users' ? 'active' : ''}><FaChartBar className="icon" /> Statistics</Link></li>
+              <li><Link to="/reports" className={location.pathname === '/reports' ? 'active' : ''}><FaUsers className="icon" /> Users</Link></li>
+              <li><Link to="/profile" className={location.pathname === '/profile' ? 'active' : ''}><FaUser className="icon" /> Profile</Link></li>
+              <li><Link to="/tracker" className={location.pathname.startsWith('/tracker') ? 'active' : ''}><FaClipboardList className="icon" /> Tracker</Link></li>
+            </ul>
+          </nav>
+        </div>
+        <div className="logout"><FaSignOutAlt className="icon" /> Logout</div>
       </aside>
-
       <main className="main-content">
         <Routes>
           <Route path="/" element={<Dashboard />} />
           <Route path="/users" element={<div><h2>Statistics Page</h2></div>} />
           <Route path="/reports" element={<div><h2>Users Page</h2></div>} />
-          {/* Default Tracker entry point */}
+          <Route path="/profile" element={<div><h2>Profile Page</h2></div>} />
           <Route path="/tracker/*" element={<Tracker />} />
         </Routes>
       </main>

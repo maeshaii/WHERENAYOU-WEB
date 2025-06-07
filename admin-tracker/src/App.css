@@ -4,36 +4,108 @@
   font-family: Arial, sans-serif;
 }
 
+/* SIDEBAR */
 .sidebar {
   width: 220px;
   background-color: #1C4E80;
   color: white;
-  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 0;
+  height: 100vh;
 }
 
-.sidebar h2 {
-  margin-top: 0;
+/* Logo + Nav wrapper */
+.top-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  flex-grow: 1;
+}
+
+/* Circular logo */
+.logo-circle {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+
+.logo-text {
+  color: #1C4E80;
+  text-align: center;
+  font-size: 12px;
+  font-weight: bold;
+  line-height: 1.2;
+}
+
+/* Navigation */
+.sidebar nav {
+  width: 100%;
 }
 
 .sidebar ul {
   list-style: none;
-  padding-left: 0;
+  padding: 0;
+  width: 100%;
 }
 
 .sidebar ul li {
-  margin: 15px 0;
+  width: 100%;
 }
 
 .sidebar ul li a {
+  display: flex;
+  align-items: center;
+  padding: 12px 24px;
   color: white;
   text-decoration: none;
-  font-weight: 600;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background-color 0.3s;
+  width: 100%;
+  box-sizing: border-box;
+  background-color: transparent;
 }
 
-.sidebar ul li a:hover {
-  text-decoration: underline;
+.sidebar ul li a:hover,
+.sidebar ul li a.active {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 0;
 }
 
+/* Icons */
+.icon {
+  color: white;
+  margin-right: 10px;
+  font-size: 16px;
+}
+
+/* Logout button */
+.logout {
+  margin-bottom: 40px;
+  padding: 12px 24px;
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+  text-align: center;
+  transition: background-color 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logout:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* MAIN CONTENT */
 .main-content {
   flex-grow: 1;
   padding: 40px;
@@ -45,9 +117,10 @@
 }
 
 .teal-bg {
-  background-color: #a9dce3 !important;}
+  background-color: #a9dce3 !important;
+}
 
-/* Apply full height and overflow only on Tracker page */
+/* Tracker-specific layout */
 .tracker-layout {
   height: 100vh;
   overflow: hidden;
@@ -60,7 +133,7 @@
   background-color: transparent;
 }
 
-/* Ensures full height of the app */
+/* Full app height */
 html, body, #root {
   margin: 0;
   padding: 0;
