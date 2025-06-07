@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './Tracker.css';
 import { FaPlusCircle } from 'react-icons/fa';
 import { Link, useLocation, Routes, Route, Navigate } from 'react-router-dom';
@@ -9,12 +9,24 @@ import Setting from './Setting';
 function Tracker() {
   const location = useLocation();
   const isActive = (path) => location.pathname === path;
-
   const isQuestionPage = location.pathname === '/tracker/questions' || location.pathname === '/tracker';
+
+  // Form title state
+  const [formTitle, setFormTitle] = useState('Untitled Form');
+  const [isEditingTitle, setIsEditingTitle] = useState(false);
+
+  // Handle edit/submit
+  const handleTitleClick = () => setIsEditingTitle(true);
+  const handleTitleChange = (e) => setFormTitle(e.target.value);
+  const handleTitleBlur = () => setIsEditingTitle(false);
+  const handleTitleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      setIsEditingTitle(false);
+    }
+  };
 
   return (
     <div className="tracker-container">
-      {/* Show buttons only on Questions tab */}
       {isQuestionPage && (
         <div className="floating-button-group">
           <button className="icon-button"><FaPlusCircle /> Add Question</button>
@@ -25,7 +37,22 @@ function Tracker() {
       <div className="tracker-inner">
         {/* Header */}
         <div className="tracker-header">
-          <h2>Untitled Form</h2>
+          {isEditingTitle ? (
+            <input
+              type="text"
+              value={formTitle}
+              onChange={handleTitleChange}
+              onBlur={handleTitleBlur}
+              onKeyDown={handleTitleKeyDown}
+              autoFocus
+              className="form-title-input"
+            />
+          ) : (
+            <h2 className="form-title" onClick={handleTitleClick} title="Click to edit">
+              {formTitle}
+            </h2>
+          )}
+
           <div className="tracker-tabs">
             <Link to="/tracker/questions" className={isActive('/tracker/questions') ? 'active' : ''}>Questions</Link>
             <Link to="/tracker/responses" className={isActive('/tracker/responses') ? 'active' : ''}>Responses</Link>
