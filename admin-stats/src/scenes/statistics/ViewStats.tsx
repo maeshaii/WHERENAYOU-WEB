@@ -1,5 +1,5 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom'; // ✅ Needed for back navigation
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Sidebar from '../global/sidebar.tsx';
 
 interface Graduate {
@@ -9,46 +9,39 @@ interface Graduate {
 
 const graduates: Graduate[] = [
   { year: 2024, status: 'Imported' },
-  { year: 2024, status: 'Imported' },
-  { year: 2024, status: 'Imported' },
-  { year: 2024, status: 'Imported' }
+  { year: 2023, status: 'Imported' },
+  { year: 2022, status: 'Imported' },
+  { year: 2021, status: 'Imported' }
 ];
 
 const App: React.FC = () => {
-  const navigate = useNavigate(); // ✅ Hook to navigate
+  const navigate = useNavigate();
+  const [showModal, setShowModal] = useState(false);
 
   const handleGenerateClick = () => {
-    alert('Generating statistics...');
+    setShowModal(true);
   };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
+
   const handleCardClick = (year: number) => {
-    navigate(`/alumni/${year}`);
+    navigate(`/AlumniData/${year}`);
   };
-  
 
   return (
-    <div style={{ display: 'flex', height: '100vh' }}>
-      {/* Sidebar */}
+    <div style={{ display: 'flex', height: '100vh', marginLeft: '220px' }}>
       <Sidebar />
 
-      {/* Main Content */}
       <div style={styles.container}>
-        {/* Header */}
         <div style={styles.header}>
           <div style={styles.leftSection}>
-          <button
-        onClick={() => navigate(-1)} // Go back to previous page
-        style={{
-          background: 'none',
-          border: 'none',
-          color: '#1D4E89',
-          fontSize: '20px',
-          cursor: 'pointer',
-          fontWeight: 'bold',
-          marginBottom: '20px',
-        }}
-      >
-        &lt; Back
-      
+            <button
+              onClick={() => navigate(-1)}
+              style={styles.backButton}
+            >
+              &lt; Back
             </button>
             <div style={styles.viewStatistics}>
               <span role="img" aria-label="chart">📊</span> View Statistics
@@ -59,23 +52,52 @@ const App: React.FC = () => {
           </button>
         </div>
 
-        {/* Cards */}
         <div style={styles.cards}>
           {graduates.map((grad, index) => (
-          <div
-          key={index}
-          style={styles.card}
-          onClick={() => handleCardClick(grad.year)}
-        >
-          <div style={styles.cardImage} />
-          <div style={styles.cardText}>
-            <p><strong>YEAR GRADUATED:</strong> {grad.year}</p>
-            <p>{grad.status}</p>
-          </div>
-        </div>
-        
+            <div
+              key={index}
+              style={styles.card}
+              onClick={() => handleCardClick(grad.year)}
+            >
+              <div style={styles.cardImage} />
+              <div style={styles.cardText}>
+                <p><strong>YEAR GRADUATED:</strong> {grad.year}</p>
+                <p>{grad.status}</p>
+              </div>
+            </div>
           ))}
         </div>
+
+        {/* Modal */}
+        {showModal && (
+          <div style={modalStyles.overlay}>
+            <div style={modalStyles.modal}>
+              <h2 style={{ fontSize: '18px', fontWeight: 'bold', textAlign: 'center' }}>Generate Statistics</h2>
+
+              <label>Year:</label>
+              <select style={modalStyles.dropdown}>
+                <option>2024</option>
+                <option>2023</option>
+                <option>2022</option>
+              </select>
+
+              <label>Course:</label>
+              <select style={modalStyles.dropdown}>
+                <option>BSIT</option>
+                <option>BSIS</option>
+                <option>BSBA</option>
+              </select>
+
+              <label>Type of Statistics:</label>
+              <select style={modalStyles.dropdown}>
+                <option>Employment Rate</option>
+                <option>Salary Range</option>
+              </select>
+
+              <button style={modalStyles.button} onClick={handleCloseModal}>Generate</button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -96,23 +118,23 @@ const styles: { [key: string]: React.CSSProperties } = {
   },
   leftSection: {
     display: 'flex',
-    flexDirection: 'column', // ⬅️ Make children stack vertically
-    alignItems: 'flex-start', // ⬅️ Align to the left
-    gap: '10px' // ⬅️ Optional spacing between items
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+    gap: '10px'
   },
-  
   viewStatistics: {
     fontSize: '20px',
     fontWeight: 500,
     fontFamily: 'Arial, sans-serif'
   },
-  backBtn: {
-    backgroundColor: '#e5e7eb',
+  backButton: {
+    background: 'none',
     border: 'none',
-    padding: '8px 12px',
-    borderRadius: '12px',
+    color: '#1D4E89',
+    fontSize: '20px',
     cursor: 'pointer',
-    fontWeight: 500
+    fontWeight: 'bold',
+    marginBottom: '20px',
   },
   generateBtn: {
     backgroundColor: '#4f46e5',
@@ -125,10 +147,10 @@ const styles: { [key: string]: React.CSSProperties } = {
   },
   cards: {
     display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', // Responsive grid
+    gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
     gap: '20px',
     width: '100%'
-  },  
+  },
   card: {
     backgroundColor: '#17406a',
     color: 'white',
@@ -138,8 +160,8 @@ const styles: { [key: string]: React.CSSProperties } = {
     transition: 'transform 0.2s',
     display: 'flex',
     flexDirection: 'column',
-    width: '90%', // Let the grid control width
-  },  
+    width: '90%'
+  },
   cardImage: {
     backgroundColor: 'white',
     height: '100px',
@@ -151,7 +173,42 @@ const styles: { [key: string]: React.CSSProperties } = {
     textAlign: 'left',
     width: '100%'
   }
-  
+};
+
+const modalStyles: { [key: string]: React.CSSProperties } = {
+  overlay: {
+    position: 'fixed',
+    top: 0, left: 0, right: 0, bottom: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 1000
+  },
+  modal: {
+    backgroundColor: 'white',
+    padding: '30px',
+    borderRadius: '12px',
+    width: '350px',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '10px',
+    boxShadow: '0 4px 20px rgba(0,0,0,0.2)'
+  },
+  dropdown: {
+    padding: '8px',
+    borderRadius: '8px',
+    border: '1px solid #ccc'
+  },
+  button: {
+    marginTop: '15px',
+    padding: '10px',
+    backgroundColor: '#4f46e5',
+    color: 'white',
+    border: 'none',
+    borderRadius: '10px',
+    cursor: 'pointer'
+  }
 };
 
 export default App;
