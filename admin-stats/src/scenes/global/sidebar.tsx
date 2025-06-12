@@ -6,8 +6,11 @@ import { Link, useLocation } from 'react-router-dom';
 const Sidebar = () => {
   const location = useLocation();
 
-  const styles = {
+  const styles: { [key: string]: React.CSSProperties } = {
     sidebar: {
+      position: 'fixed',
+      top: 0,
+      left: 0,
       width: '220px',
       height: '100vh',
       backgroundColor: '#1e4c7a',
@@ -16,6 +19,7 @@ const Sidebar = () => {
       justifyContent: 'space-between',
       color: 'white',
       padding: '20px 10px',
+      zIndex: 1000,
     },
     topSection: {
       display: 'flex',

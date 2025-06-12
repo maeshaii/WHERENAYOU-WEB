@@ -47,7 +47,7 @@ export default function Statistics() {
   const ticks = Array.from({ length: maxTick / 200 + 1 }, (_, i) => i * 200);
 
   return (
-    <div style={{ display: 'flex', height: '100vh' }}>
+    <div style={{ display: 'flex', height: '100vh', marginLeft: '245px'}}>
       <Sidebar />
 
       <div style={{ padding: '24px', fontFamily: 'Arial, sans-serif', flex: 1 }}>

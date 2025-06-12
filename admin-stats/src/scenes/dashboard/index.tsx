@@ -5,6 +5,7 @@ const Dashboard = () => {
   const layoutStyle: React.CSSProperties = {
     display: 'flex',
     minHeight: '100vh',
+    marginLeft: '245px',
   };
 
   const contentStyle: React.CSSProperties = {
