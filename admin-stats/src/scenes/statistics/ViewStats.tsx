@@ -68,36 +68,67 @@ const App: React.FC = () => {
           ))}
         </div>
 
-        {/* Modal */}
         {showModal && (
-          <div style={modalStyles.overlay}>
-            <div style={modalStyles.modal}>
-              <h2 style={{ fontSize: '18px', fontWeight: 'bold', textAlign: 'center' }}>Generate Statistics</h2>
+  <div style={modalStyles.overlay}>
+    <div style={{ ...modalStyles.modal, position: 'relative' }}>
+      
+      {/* X button in the upper right */}
+      <button
+        onClick={handleCloseModal}
+        style={{
+          position: 'absolute',
+          top: '10px',
+          right: '15px',
+          background: 'none',
+          border: 'none',
+          fontSize: '20px',
+          fontWeight: 'bold',
+          color: '#333',
+          cursor: 'pointer',
+          lineHeight: '1'
+        }}
+      >
+        &times;
+      </button>
 
-              <label>Year:</label>
-              <select style={modalStyles.dropdown}>
-                <option>2024</option>
-                <option>2023</option>
-                <option>2022</option>
-              </select>
+      <h2 style={{
+        fontSize: '18px',
+        fontWeight: 'bold',
+        textAlign: 'center',
+        marginTop: '20px'
+      }}>
+        Generate Statistics
+      </h2>
 
-              <label>Course:</label>
-              <select style={modalStyles.dropdown}>
-                <option>BSIT</option>
-                <option>BSIS</option>
-                <option>BSBA</option>
-              </select>
+      <label>Year:</label>
+      <select style={modalStyles.dropdown}>
+        <option>2024</option>
+        <option>2023</option>
+        <option>2022</option>
+      </select>
 
-              <label>Type of Statistics:</label>
-              <select style={modalStyles.dropdown}>
-                <option>Employment Rate</option>
-                <option>Salary Range</option>
-              </select>
+      <label>Course:</label>
+      <select style={modalStyles.dropdown}>
+        <option>BSIT</option>
+        <option>BSIS</option>
+        <option>BIT-CT</option>
+      </select>
 
-              <button style={modalStyles.button} onClick={handleCloseModal}>Generate</button>
-            </div>
-          </div>
-        )}
+      <label>Type of Statistics:</label>
+      <select style={modalStyles.dropdown}>
+      <option>ALL</option>
+        <option>QPRO</option>
+        <option>CHED</option>
+        <option>SUC</option>
+        <option>AACUP</option>
+      </select>
+
+      <button style={modalStyles.button} onClick={handleCloseModal}>Generate</button>
+    </div>
+  </div>
+)}
+
+
       </div>
     </div>
   );
