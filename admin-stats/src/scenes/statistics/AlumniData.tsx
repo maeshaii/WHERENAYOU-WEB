@@ -131,7 +131,7 @@ const AlumniData: React.FC = () => {
       <option value="All">All</option>
       <option value="BSIT">BSIT</option>
       <option value="BSIS">BSIS</option>
-      <option value="BSCT">BSCT</option>
+      <option value="BSCT">BIT-CT</option>
     </select>
   </div>
 </div>
