@@ -1,114 +1,189 @@
+// App.js
 import React, { useState } from 'react';
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  NavLink
-} from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, NavLink } from 'react-router-dom';
 import './App.css';
 
 const users = [
-  { id: 1, name: 'Jay Park', idNumber: '1337564', course: 'BSIT', batch: '04/20/2024', status: 'Employed', type: 'OJT' },
-  { id: 2, name: 'Jay Park', idNumber: '1238573', course: 'BSIS', batch: '04/20/2024', status: 'Unemployed', type: 'ALUMNI' },
-  { id: 3, name: 'Jay Park', idNumber: '5678990', course: 'BSIT', batch: '04/20/2024', status: 'Employed', type: 'OJT' },
+  {
+    id: 1,
+    name: 'Harley Dave Chavez',
+    idNumber: '1337564',
+    course: 'BSIT',
+    batch: '04/20/2024',
+    status: 'Employed',
+    type: 'OJT'
+  },
+  {
+    id: 2,
+    name: 'Clien James Taneo',
+    idNumber: '1238573',
+    course: 'BSIS',
+    batch: '04/20/2024',
+    status: 'Unemployed',
+    type: 'ALUMNI',
+    gender: 'Male',
+    birthDate: '2000-01-01',
+    email: 'clien.taneo@example.com',
+    phoneNumber: '09123456789',
+    address: 'Tagum City',
+    jobStatus: 'Unemployed',
+    company: 'N/A',
+    position: 'N/A',
+    industry: 'N/A'
+  },
+  {
+    id: 3,
+    name: 'Rolino Ongco Jr.',
+    idNumber: '5678990',
+    course: 'BSIT',
+    batch: '04/20/2024',
+    status: 'Employed',
+    type: 'OJT'
+  }
 ];
 
 function Dashboard() {
   return (
-    <div className="dashboard">
-      <h1>Welcome, Admin!</h1>
-      <p>This is your dashboard where you can manage the system.</p>
+    <div className="main-content">
+      <h1>📊 Dashboard</h1>
+      <p>Welcome to the admin dashboard.</p>
     </div>
   );
 }
 
 function Users() {
   const [filter, setFilter] = useState('All');
-  const [showModal, setShowModal] = useState(false);
+  const [viewList, setViewList] = useState(null);
+  const [selectedUser, setSelectedUser] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCourse, setSelectedCourse] = useState('All');
+  const [showImportModal, setShowImportModal] = useState(false);
+  const [importForm, setImportForm] = useState({
+    course: '',
+    batch: '',
+    file: ''
+  });
 
-  let filteredUsers = [];
-  if (filter === 'All') {
-    filteredUsers = users;
-  } else {
-    filteredUsers = users.filter((user) => {
-      const matchType = user.type === filter;
-      const matchSearch = user.name.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchCourse = selectedCourse === 'All' || user.course === selectedCourse;
-      return matchType && matchSearch && matchCourse;
-    });
-  }
+  const handleImportChange = (e) => {
+    const { name, value } = e.target;
+    setImportForm(prev => ({ ...prev, [name]: value }));
+  };
 
-  const isFABVisible = filter === 'All' || filter === 'ALUMNI';
+  const handleImportSubmit = () => {
+    console.log('Imported:', importForm);
+    setShowImportModal(false);
+    setImportForm({ course: '', batch: '', file: '' });
+  };
+
+  const renderUserDetailModal = () => (
+    <div className="modal-content styled-modal">
+      <h2 className="modal-title">User Profile</h2>
+      <div className="detail-grid">
+        <label>Name</label><input value={selectedUser.name} readOnly />
+        <label>Gender</label><input value={selectedUser.gender || 'N/A'} readOnly />
+        <label>Birth Date</label><input value={selectedUser.birthDate || 'N/A'} readOnly />
+        <label>Email</label><input value={selectedUser.email || 'N/A'} readOnly />
+        <label>Phone Number</label><input value={selectedUser.phoneNumber || 'N/A'} readOnly />
+        <label>Address</label><input value={selectedUser.address || 'N/A'} readOnly />
+      </div>
+      <h2 className="modal-title">Employment Information</h2>
+      <div className="detail-grid">
+        <label>Current Job Status</label><input value={selectedUser.jobStatus || 'N/A'} readOnly />
+        <label>Company</label><input value={selectedUser.company || 'N/A'} readOnly />
+        <label>Position</label><input value={selectedUser.position || 'N/A'} readOnly />
+        <label>Industry</label><input value={selectedUser.industry || 'N/A'} readOnly />
+      </div>
+      <div className="modal-buttons">
+        <button className="cancel-btn" onClick={() => setSelectedUser(null)}>Back</button>
+      </div>
+    </div>
+  );
+
+  const getBatchHeader = () => {
+    const batchUser = users.find(
+      (user) =>
+        user.type === viewList &&
+        (selectedCourse === 'All' || user.course === selectedCourse) &&
+        (searchTerm === '' || user.name.toLowerCase().includes(searchTerm.toLowerCase()))
+    );
+    return batchUser ? batchUser.batch : 'BATCH';
+  };
 
   return (
-    <div className="app">
-      <div className="header">
-        <span className="user-icon">👥</span>
-        <span className="user-label">User</span>
-        <select
-          className="dropdown"
-          value={filter}
-          onChange={(e) => setFilter(e.target.value)}
-        >
-          <option>All</option>
-          <option>OJT</option>
-          <option>ALUMNI</option>
-        </select>
-      </div>
-
-      {(filter === 'OJT' || filter === 'ALUMNI') && (
-        <div style={{ display: 'flex', gap: '20px', alignItems: 'center', marginBottom: '20px' }}>
-          <input
-            type="text"
-            placeholder="🔍 Search..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            style={{
-              padding: '10px 15px',
-              borderRadius: '20px',
-              border: '1px solid #ccc',
-              width: '200px'
+    <div className="main-content">
+      {!viewList && (
+        <div className="header">
+          <span className="user-icon">👥</span>
+          <span className="user-label">User</span>
+          <select
+            className="dropdown"
+            value={filter}
+            onChange={(e) => {
+              setFilter(e.target.value);
+              setViewList(null);
             }}
-          />
-          <div>
-            <label style={{ fontWeight: 'bold', marginRight: '8px' }}>COURSE:</label>
-            <select
-              value={selectedCourse}
-              onChange={(e) => setSelectedCourse(e.target.value)}
+          >
+            <option>All</option>
+            <option>OJT</option>
+            <option>ALUMNI</option>
+          </select>
+        </div>
+      )}
+
+      {viewList && (
+        <div style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'flex-start',
+          marginBottom: '20px',
+          flexWrap: 'wrap',
+          gap: '20px'
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+            <button onClick={() => setViewList(null)} className="arrow-back-btn">&lsaquo;</button>
+            <h2 style={{ margin: 0 }}>BATCH {getBatchHeader()}</h2>
+          </div>
+
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '10px' }}>
+            <input
+              type="text"
+              placeholder="🔍 Search...."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
               style={{
-                padding: '6px 12px',
-                borderRadius: '12px',
+                padding: '10px 15px',
+                borderRadius: '20px',
                 border: '1px solid #ccc',
-                backgroundColor: '#4F7CFE',
-                color: 'white',
-                fontWeight: 'bold',
-                cursor: 'pointer'
+                width: '220px',
+                fontSize: '14px'
               }}
-            >
-              <option>All</option>
-              <option>BSIT</option>
-              <option>BSIS</option>
-              <option>BIT-CT</option>
-            </select>
+            />
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <label style={{ fontWeight: 'bold' }}>COURSE:</label>
+              <select
+                value={selectedCourse}
+                onChange={(e) => setSelectedCourse(e.target.value)}
+                style={{
+                  padding: '8px 16px',
+                  borderRadius: '20px',
+                  backgroundColor: '#4F7CFE',
+                  color: 'white',
+                  fontWeight: 'bold',
+                  border: 'none',
+                  cursor: 'pointer'
+                }}
+              >
+                <option>All</option>
+                <option>BSIT</option>
+                <option>BSIS</option>
+                <option>BIT-CT</option>
+              </select>
+            </div>
           </div>
         </div>
       )}
 
-      {filter === 'All' ? (
-        <div className="card-container">
-          {filteredUsers.map((user) => (
-            <div className="card" key={user.id}>
-              <div className="card-image" />
-              <div className="card-text">
-                <strong>YEAR GRADUATED: {user.batch}</strong>
-                <p>{user.source || 'Imported'}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      ) : (
+      {viewList ? (
         <table className="user-table">
           <thead>
             <tr>
@@ -121,62 +196,73 @@ function Users() {
             </tr>
           </thead>
           <tbody>
-            {filteredUsers.map((user, index) => (
-              <tr key={user.id}>
-                <td>{String(index + 1).padStart(2, '0')}</td>
-                <td>{user.name}</td>
-                <td>{user.idNumber}</td>
-                <td>{user.course}</td>
-                <td>{user.batch}</td>
-                <td style={{ color: user.status === 'Employed' ? 'teal' : 'orangered' }}>
-                  {user.status}
-                </td>
-              </tr>
-            ))}
+            {users
+              .filter(
+                (user) =>
+                  user.type === viewList &&
+                  (selectedCourse === 'All' || user.course === selectedCourse) &&
+                  (searchTerm === '' || user.name.toLowerCase().includes(searchTerm.toLowerCase()))
+              )
+              .map((user, index) => (
+                <tr
+                  key={user.id}
+                  onClick={() => viewList === 'ALUMNI' && setSelectedUser(user)}
+                  style={{ cursor: viewList === 'ALUMNI' ? 'pointer' : 'default' }}
+                >
+                  <td>{String(index + 1).padStart(2, '0')}</td>
+                  <td>{user.name}</td>
+                  <td>{user.idNumber}</td>
+                  <td>{user.course}</td>
+                  <td>{user.batch}</td>
+                  <td style={{ color: user.status === 'Employed' ? 'teal' : 'orangered' }}>{user.status}</td>
+                </tr>
+              ))}
           </tbody>
         </table>
-      )}
-
-      {isFABVisible && (
-        <>
-          <button className="fab" onClick={() => setShowModal(true)}>+</button>
-
-          {showModal && (
-            <div className="modal-backdrop">
-              <div className="modal">
-                {filter === 'ALUMNI' ? (
-                  <>
-                    <h2>User Profile</h2>
-                    <input type="text" placeholder="Name" />
-                    <input type="text" placeholder="Gender" />
-                    <input type="date" placeholder="Birth Date" />
-                    <input type="email" placeholder="Email" />
-                    <input type="tel" placeholder="Phone Number" />
-                    <input type="text" placeholder="Address" />
-
-                    <h2>Employment Information</h2>
-                    <input type="text" placeholder="Current Job Status" />
-                    <input type="text" placeholder="Company" />
-                    <input type="text" placeholder="Position" />
-                    <input type="text" placeholder="Industry" />
-                  </>
-                ) : (
-                  <>
-                    <h2>Import Alumni Data</h2>
-                    <input type="text" placeholder="Course" />
-                    <input type="text" placeholder="Batch Graduated" />
-                    <input type="file" />
-                  </>
-                )}
-
-                <div className="modal-buttons">
-                  <button className="add-btn">Add</button>
-                  <button className="cancel-btn" onClick={() => setShowModal(false)}>Back</button>
+      ) : (
+        <div className="card-container">
+          {users
+            .filter((user) => filter === 'All' || user.type === filter)
+            .map((user) => (
+              <div
+                className="card"
+                key={user.id}
+                onClick={() => setViewList(user.type)}
+                style={{ cursor: 'pointer' }}
+              >
+                <div className="card-image" />
+                <div className="card-text">
+                  <strong>YEAR GRADUATED: {user.batch}</strong>
+                  <p>Imported</p>
                 </div>
               </div>
+            ))}
+          <button className="fab" onClick={() => setShowImportModal(true)}>+</button>
+        </div>
+      )}
+
+      {showImportModal && (
+        <div className="modal-backdrop">
+          <div className="modal">
+            <h2 className="modal-title">Import Alumni Data</h2>
+            <label>Course</label>
+            <input name="course" value={importForm.course} onChange={handleImportChange} />
+            <label>Batch Graduated</label>
+            <input name="batch" value={importForm.batch} onChange={handleImportChange} />
+            <label>Upload File</label>
+            <input name="file" value={importForm.file} onChange={handleImportChange} />
+            <div className="modal-buttons">
+              <button className="add-btn" onClick={handleImportSubmit}>Add</button>
+              <button className="cancel-btn" onClick={() => setShowImportModal(false)}>Cancel</button>
             </div>
-          )}
-        </>
+          </div>
+        </div>
+      )}
+
+      {selectedUser && (
+        <div className="modal-backdrop">
+          <div className="modal">{renderUserDetailModal()}</div>
+        </div>
       )}
     </div>
   );
@@ -187,12 +273,16 @@ function App() {
     <Router>
       <div className="main-layout">
         <aside className="sidebar">
-          <h2 className="logo">WhereNaYou</h2>
+          <div className="logo-circle">
+            <div className="logo-text">WhereNa<br />You</div>
+          </div>
           <ul>
-            <li><NavLink to="/" end>Dashboard</NavLink></li>
-            <li><NavLink to="/users">Users</NavLink></li>
+            <li><NavLink to="/" end>📊 Dashboard</NavLink></li>
+            <li><NavLink to="/users">👥 Users</NavLink></li>
+            <li><NavLink to="/profile">🧑‍💼 Profile</NavLink></li>
+            <li><NavLink to="/tracker">📂 Tracker</NavLink></li>
           </ul>
-          <div className="logout">⏏ Logout</div>
+          <div className="logout">↩ Logout</div>
         </aside>
 
         <main className="main-content">
@@ -207,4 +297,3 @@ function App() {
 }
 
 export default App;
-
