@@ -18,7 +18,6 @@ const Login = () => {
       </div>
 
       <div style={styles.rightSection}>
-        <button style={styles.backButton}>&larr;</button>
 
         <h2 style={styles.h2}>Welcome</h2>
         <h1 style={styles.h1}>Technologist</h1>
