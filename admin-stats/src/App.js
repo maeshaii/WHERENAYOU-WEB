@@ -5,8 +5,8 @@ import Statistics from "./scenes/statistics/index.tsx"
 import ViewStats from "./scenes/statistics/ViewStats.tsx"
 import AlumniData from "./scenes/statistics/AlumniData.tsx"
 import Login from './scenes/Login/index.tsx'
-
-
+import Tracker from './scenes/tracker/index.tsx';
+import Users from './scenes/users/index.tsx'
 // import other pages like Statistics, Users, etc.
 
 function App() {
@@ -22,6 +22,8 @@ function App() {
         <Route path="/statistics" element={<Statistics />} />
         <Route path="/ViewStats" element={<ViewStats />} />
         <Route path="/AlumniData/:year" element={<AlumniData />} />
+        <Route path="/tracker/*" element={<Tracker />} />
+        <Route path="/users" element={<Users />} />
 
 
         {/* Add more routes like:
