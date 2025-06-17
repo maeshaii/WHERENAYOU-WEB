@@ -1,0 +1,25 @@
+/* dashboard.css */
+
+/* Container for the main content area */
+.main-content {
+  flex: 1;
+  padding: 40px;
+  background-color: #f4f6f9;
+  min-height: 100vh;
+}
+
+/* Dashboard header */
+.main-content h1 {
+  font-size: 32px;
+  color: #000;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Dashboard subtext/description */
+.main-content p {
+  font-size: 16px;
+  color: #333;
+}
