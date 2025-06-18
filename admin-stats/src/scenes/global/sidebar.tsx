@@ -1,40 +1,29 @@
 import React from 'react';
 import { FaChartBar, FaUser, FaUserCircle, FaTh, FaPowerOff } from 'react-icons/fa';
 import { LuLocateFixed } from 'react-icons/lu';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 const Sidebar = () => {
   const location = useLocation();
-  const navigate = useNavigate();
 
-  const handleLogout = () => {
-    // Optional: clear any stored session or login state
-    localStorage.clear(); // or sessionStorage.clear();
-    navigate('/Login');
-  };
-
-  const styles: { [key: string]: React.CSSProperties } = {
+  const styles = {
     sidebar: {
-      position: 'fixed',
-      top: 0,
-      left: 0,
       width: '220px',
       height: '100vh',
       backgroundColor: '#1e4c7a',
       display: 'flex',
-      flexDirection: 'column',
+      flexDirection: 'column' as const,
       justifyContent: 'space-between',
       color: 'white',
       padding: '20px 10px',
-      zIndex: 1000,
     },
     topSection: {
       display: 'flex',
-      flexDirection: 'column',
+      flexDirection: 'column' as const,
     },
     logo: {
       display: 'flex',
-      flexDirection: 'column',
+      flexDirection: 'column' as const,
       alignItems: 'center',
       marginBottom: '20px',
     },
@@ -46,11 +35,11 @@ const Sidebar = () => {
     logoText: {
       fontSize: '14px',
       marginTop: '8px',
-      textAlign: 'center',
-      fontWeight: 'bold',
+      textAlign: 'center' as const,
+      fontWeight: 'bold' as const,
     },
     navList: {
-      listStyleType: 'none',
+      listStyleType: 'none' as const,
       padding: 0,
       margin: 0,
     },
@@ -77,6 +66,7 @@ const Sidebar = () => {
       alignItems: 'center',
       padding: '12px 16px',
       cursor: 'pointer',
+      textDecoration: 'none',
       color: 'white',
     },
   };
@@ -114,9 +104,9 @@ const Sidebar = () => {
         </ul>
       </div>
 
-      <div onClick={handleLogout} style={styles.logout}>
+      <Link to="/logout" style={styles.logout}>
         <FaPowerOff style={styles.icon} /> Logout
-      </div>
+      </Link>
     </div>
   );
 };

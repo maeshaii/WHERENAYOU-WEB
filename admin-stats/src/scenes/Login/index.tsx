@@ -1,14 +1,55 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import background from '../../images/ctu.jpg';
+import { getCookie } from '../utils/csrf';
+
+axios.defaults.withCredentials = true;
+
 
 const Login = () => {
   const navigate = useNavigate();
+  const [acc_username, setUsername] = useState('');
+  const [acc_password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
-  const handleLogin = (e: React.FormEvent) => {
+  // Get CSRF cookie when component mounts
+  useEffect(() => {
+    axios.get('http://127.0.0.1:8000/api/csrf/')
+      .then(() => console.log('CSRF cookie set'))
+      .catch(() => console.error('CSRF cookie fetch failed'));
+  }, []);
+
+
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    // You can add validation logic here
-    navigate('/dashboard'); // Navigate to Dashboard on login
+
+    const formattedPassword = new Date(acc_password).toISOString().split('T')[0];
+    const csrfToken = getCookie('csrftoken');
+
+    try {
+      const response = await axios.post(
+        'http://127.0.0.1:8000/api/login/',
+        {
+          acc_username,
+          acc_password: formattedPassword,
+        },
+        {
+          headers: {
+            'X-CSRFToken': csrfToken || '',
+          },
+        }
+      );
+
+      if (response.data.success) {
+        navigate('/dashboard');
+      } else {
+        setError(response.data.message || 'Invalid CTU ID or Birthdate');
+      }
+    } catch (err) {
+      console.error('Login error:', err);
+      setError('Server error. Please try again later.');
+    }
   };
 
   return (
@@ -18,7 +59,6 @@ const Login = () => {
       </div>
 
       <div style={styles.rightSection}>
-
         <h2 style={styles.h2}>Welcome</h2>
         <h1 style={styles.h1}>Technologist</h1>
         <p style={styles.p}>Connect & Collaborate</p>
@@ -30,6 +70,8 @@ const Login = () => {
             id="ctu-id"
             placeholder="Enter your CTU ID"
             required
+            value={acc_username}
+            onChange={(e) => setUsername(e.target.value)}
             style={styles.input}
           />
 
@@ -38,8 +80,12 @@ const Login = () => {
             type="date"
             id="birthdate"
             required
+            value={acc_password}
+            onChange={(e) => setPassword(e.target.value)}
             style={styles.input}
           />
+
+          {error && <p style={{ color: 'red', marginBottom: 10 }}>{error}</p>}
 
           <button type="submit" style={styles.button}>Log In</button>
         </form>
@@ -111,16 +157,6 @@ const styles: Record<string, React.CSSProperties> = {
     borderRadius: 5,
     cursor: 'pointer',
     alignSelf: 'center',
-  },
-  backButton: {
-    position: 'absolute',
-    top: 20,
-    left: 20,
-    fontSize: 24,
-    color: 'white',
-    background: 'none',
-    border: 'none',
-    cursor: 'pointer',
   },
 };
 
