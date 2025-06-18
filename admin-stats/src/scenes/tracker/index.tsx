@@ -31,7 +31,7 @@ const Tracker: React.FC = () => {
   };
 
   return (
-    <div style={{ display: 'flex',marginLeft: '220px' }}>
+    <div style={{ display: 'flex'}}>
       <Sidebar /> {/* ✅ Sidebar added */}
 
       <div className="tracker-container" style={{ flex: 1, padding: '20px' }}>

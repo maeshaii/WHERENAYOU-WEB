@@ -357,7 +357,7 @@ const Users: React.FC = () => {
         }
       `}</style>
 
-      <div className="main-layout" style={{ display: 'flex', minHeight: '100vh', marginLeft: '240px' }}>
+      <div className="main-layout" style={{ display: 'flex', minHeight: '100vh' }}>
         <Sidebar />
 
         <div className="main-content">

@@ -2,11 +2,10 @@ import React from 'react';
 import Sidebar from '../global/sidebar.tsx';
 
 const Dashboard = () => {
-  const layoutStyle: React.CSSProperties = {
-    display: 'flex',
-    minHeight: '100vh',
-    marginLeft: '245px',
-  };
+ const layoutStyle: React.CSSProperties = {
+  display: 'flex',
+  minHeight: '100vh',
+};
 
   const contentStyle: React.CSSProperties = {
     flex: 1,

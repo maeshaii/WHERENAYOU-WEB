@@ -39,7 +39,7 @@ const AlumniData: React.FC = () => {
   });
 
   return (
-    <div style={{ display: 'flex', height: '100vh', fontFamily: 'Arial, sans-serif',marginLeft: '220px' }}>
+    <div style={{ display: 'flex', height: '100vh', fontFamily: 'Arial, sans-serif' }}>
       <Sidebar />
 
       <div style={{ flex: 1, overflowY: 'auto' }}>

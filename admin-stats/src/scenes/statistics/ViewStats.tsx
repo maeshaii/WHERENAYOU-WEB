@@ -31,7 +31,7 @@ const App: React.FC = () => {
   };
 
   return (
-    <div style={{ display: 'flex', height: '100vh', marginLeft: '220px' }}>
+    <div style={{ display: 'flex', height: '100vh' }}>
       <Sidebar />
 
       <div style={styles.container}>
