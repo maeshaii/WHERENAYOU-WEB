@@ -1,11 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import background from '../../images/ctu.jpg';
-import { getCookie } from '../utils/csrf';
-
-axios.defaults.withCredentials = true;
-
+import { getCsrfToken, loginUser } from '../../api/api.ts';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -13,45 +9,26 @@ const Login = () => {
   const [acc_password, setPassword] = useState('');
   const [error, setError] = useState('');
 
-  // Get CSRF cookie when component mounts
   useEffect(() => {
-    axios.get('http://127.0.0.1:8000/api/csrf/')
-      .then(() => console.log('CSRF cookie set'))
-      .catch(() => console.error('CSRF cookie fetch failed'));
+    getCsrfToken();
   }, []);
-
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const formattedPassword = new Date(acc_password).toISOString().split('T')[0];
-    const csrfToken = getCookie('csrftoken');
-
     try {
-      const response = await axios.post(
-        'http://127.0.0.1:8000/api/login/',
-        {
-          acc_username,
-          acc_password: formattedPassword,
-        },
-        {
-          headers: {
-            'X-CSRFToken': csrfToken || '',
-          },
-        }
-      );
+      const data = await loginUser(acc_username, acc_password);
 
-      if (response.data.success) {
+      if (data.success) {
         navigate('/dashboard');
       } else {
-        setError(response.data.message || 'Invalid CTU ID or Birthdate');
+        setError(data.message || 'Invalid CTU ID or Birthdate');
       }
     } catch (err) {
       console.error('Login error:', err);
       setError('Server error. Please try again later.');
     }
   };
-
   return (
     <div style={styles.container}>
       <div style={styles.leftSection}>

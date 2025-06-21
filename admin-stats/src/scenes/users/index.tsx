@@ -3,7 +3,44 @@ import React, { useState } from 'react';
 import Sidebar from '../global/sidebar.tsx';
 import { User } from './users.tsx';
 
-const users: User[] = [/* Add your user data here */];
+const users: User[] = [
+  {
+    id: 1,
+    name: 'Harley Dave Chavez',
+    idNumber: '1337564',
+    course: 'BSIT',
+    batch: '04/20/2024',
+    status: 'Employed',
+    type: 'OJT',
+  },
+  {
+    id: 2,
+    name: 'Clien James Taneo',
+    idNumber: '1238573',
+    course: 'BSIS',
+    batch: '04/20/2024',
+    status: 'Unemployed',
+    type: 'ALUMNI',
+    gender: 'Male',
+    birthDate: '2000-01-01',
+    email: 'clien.taneo@example.com',
+    phoneNumber: '09123456789',
+    address: 'Tagum City',
+    jobStatus: 'Unemployed',
+    company: 'N/A',
+    position: 'N/A',
+    industry: 'N/A',
+  },
+  {
+    id: 3,
+    name: 'Rolino Ongco Jr.',
+    idNumber: '5678990',
+    course: 'BSIT',
+    batch: '04/20/2024',
+    status: 'Employed',
+    type: 'OJT',
+  },
+];
 
 interface ImportForm {
   course: string;
