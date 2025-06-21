@@ -2,7 +2,7 @@ from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from django.utils.dateparse import parse_date
-from .models import User
+from shared.models import User
 import json
 
 @ensure_csrf_cookie
@@ -40,7 +40,7 @@ def login_view(request):
                 'success': True,
                 'message': 'Login successful',
                 'user': {
-                    'id': user.id,
+                    'id': user.user_id,
                     'name': f"{user.f_name} {user.l_name}",
                     'year_graduated': user.year_graduated,
                     # add more fields if needed
